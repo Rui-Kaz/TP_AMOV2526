@@ -44,6 +44,56 @@
           "schedule": "10h00 a 19h00",
           "average_price": "15 EUR",
           "location": "Parque Dr. Manuel Braga"
+        },
+        {
+          "id": 11,
+          "name": "Mosteiro de Santa Clara-a-Velha",
+          "short_description": "Ruínas do antigo mosteiro gótico do século XIII.",
+          "description": "O Mosteiro de Santa Clara-a-Velha foi recuperado após séculos submerso pelas águas do Mondego. Inclui um centro interpretativo com achados arqueológicos e multimédia.",
+          "image": "imagens/santa_clara_velha.jpg",
+          "schedule": "10h00 a 19h00",
+          "average_price": "4 EUR",
+          "location": "Rua das Parreiras"
+        },
+        {
+          "id": 12,
+          "name": "Jardim Botânico da Universidade de Coimbra",
+          "short_description": "Jardim histórico do século XVIII com diversas espécies botânicas.",
+          "description": "O Jardim Botânico é um dos mais antigos de Portugal, com uma vasta coleção de plantas de todo o mundo, estufas e áreas temáticas.",
+          "image": "imagens/jardim_botanico.jpg",
+          "schedule": "09h00 a 20h00",
+          "average_price": "2 EUR",
+          "location": "Calçada Martim de Freitas"
+        },
+        {
+          "id": 13,
+          "name": "Aqueduto de São Sebastião",
+          "short_description": "Aqueduto renascentista do século XVI.",
+          "description": "O Aqueduto de São Sebastião, também conhecido como Arcos do Jardim, foi construído para abastecer a Alta de Coimbra e estende-se por cerca de 1 km.",
+          "image": "imagens/aqueduto.jpg",
+          "schedule": "Acesso livre exterior",
+          "average_price": "Gratuito",
+          "location": "Rua Padre António Vieira"
+        },
+        {
+          "id": 14,
+          "name": "Torre de Anto",
+          "short_description": "Torre medieval integrada na muralha da cidade.",
+          "description": "A Torre de Anto fazia parte das antigas muralhas de Coimbra e foi residência do poeta António Nobre. Atualmente acolhe eventos culturais.",
+          "image": "imagens/torre_anto.jpg",
+          "schedule": "Visitas mediante marcação",
+          "average_price": "Gratuito",
+          "location": "Calçada de Santa Isabel"
+        },
+        {
+          "id": 15,
+          "name": "Convento de Santa Clara-a-Nova",
+          "short_description": "Convento barroco do século XVII com túmulo da Rainha Santa Isabel.",
+          "description": "O Convento de Santa Clara-a-Nova foi construído para substituir o mosteiro antigo. Guarda o túmulo original da Rainha Santa Isabel e oferece vistas panorâmicas da cidade.",
+          "image": "imagens/santa_clara_nova.jpg",
+          "schedule": "09h00 a 18h00",
+          "average_price": "2.50 EUR",
+          "location": "Alto de Santa Clara"
         }
       ]
     },
@@ -79,6 +129,56 @@
           "schedule": "10h00 a 17h00",
           "average_price": "2 EUR",
           "location": "Parque Dr. Manuel Braga"
+        },
+        {
+          "id": 16,
+          "name": "Museu Académico de Coimbra",
+          "short_description": "Museu dedicado à tradição académica e cultura estudantil.",
+          "description": "O Museu Académico preserva a memória das tradições académicas de Coimbra, incluindo trajes, instrumentos musicais, documentos históricos e a história da Queima das Fitas.",
+          "image": "imagens/museu_academico.jpg",
+          "schedule": "10h00 a 13h00; 14h00 a 18h00",
+          "average_price": "3 EUR",
+          "location": "Rua Guilherme Moreira"
+        },
+        {
+          "id": 17,
+          "name": "Museu Bissaya Barreto",
+          "short_description": "Casa-museu com coleção de arte e mobiliário do médico e filantropo.",
+          "description": "A Casa Bissaya Barreto expõe a coleção pessoal do médico, incluindo pintura, escultura, azulejos, mobiliário e objetos de arte decorativa.",
+          "image": "imagens/museu_bissaya.jpg",
+          "schedule": "14h00 a 18h00",
+          "average_price": "3 EUR",
+          "location": "Rua de Infante D. Henrique"
+        },
+        {
+          "id": 18,
+          "name": "Núcleo da Cidade Muralhada",
+          "short_description": "Espaço museológico sobre a Coimbra medieval.",
+          "description": "O Núcleo da Cidade Muralhada apresenta a evolução urbana de Coimbra desde a época romana até à Idade Média, com vestígios arqueológicos das antigas muralhas.",
+          "image": "imagens/cidade_muralhada.jpg",
+          "schedule": "10h00 a 13h00; 14h00 a 18h00",
+          "average_price": "2 EUR",
+          "location": "Almedina"
+        },
+        {
+          "id": 19,
+          "name": "Casa Museu Miguel Torga",
+          "short_description": "Residência e consultório do escritor Miguel Torga.",
+          "description": "A Casa Museu Miguel Torga preserva o espaço onde o escritor viveu e exerceu medicina, com biblioteca pessoal, objetos e documentos.",
+          "image": "imagens/casa_torga.jpg",
+          "schedule": "Terça a Sábado 14h00 a 18h00",
+          "average_price": "2 EUR",
+          "location": "Rua Fernando Pessoa"
+        },
+        {
+          "id": 20,
+          "name": "Museu da Santa Casa da Misericórdia",
+          "short_description": "Museu com arte sacra e história da instituição de solidariedade.",
+          "description": "O museu apresenta pintura, escultura, ourivesaria e paramentos litúrgicos, refletindo cinco séculos de ação social da Santa Casa da Misericórdia.",
+          "image": "imagens/museu_misericordia.jpg",
+          "schedule": "10h00 a 13h00; 14h00 a 17h30",
+          "average_price": "2 EUR",
+          "location": "Largo da Misericórdia"
         }
       ]
     },
@@ -114,6 +214,56 @@
           "schedule": "12h00 a 15h00; 19h00 a 22h00",
           "average_price": "25 EUR",
           "location": "Praça do Comércio"
+        },
+        {
+          "id": 21,
+          "name": "Restaurante Zé Manel dos Ossos",
+          "short_description": "Tasca tradicional famosa pelo arroz de tamboril.",
+          "description": "O Zé Manel dos Ossos é uma tasca emblemática de Coimbra, com paredes cobertas de mensagens dos clientes. Destaque para o arroz de tamboril e pratos caseiros.",
+          "image": "imagens/ze_manel.jpg",
+          "schedule": "12h00 a 15h00; 19h00 a 22h00",
+          "average_price": "20 EUR",
+          "location": "Beco do Forno"
+        },
+        {
+          "id": 22,
+          "name": "Restaurante Fangas Mercearia Bar",
+          "short_description": "Espaço moderno que reinterpreta a gastronomia tradicional.",
+          "description": "O Fangas combina tradição e modernidade, servindo petiscos e pratos revisitados num ambiente contemporâneo junto ao rio Mondego.",
+          "image": "imagens/fangas.jpg",
+          "schedule": "12h00 a 24h00",
+          "average_price": "25 EUR",
+          "location": "Avenida Emídio Navarro"
+        },
+        {
+          "id": 23,
+          "name": "Pastelaria Briosa",
+          "short_description": "Pastelaria histórica famosa pelos pastéis de Santa Clara.",
+          "description": "A Briosa é a pastelaria mais antiga de Coimbra, conhecida pelos pastéis de Santa Clara, doces conventuais feitos com ovos e amêndoa.",
+          "image": "imagens/briosa.jpg",
+          "schedule": "07h30 a 20h00",
+          "average_price": "8 EUR",
+          "location": "Largo da Portagem"
+        },
+        {
+          "id": 24,
+          "name": "Restaurante Arcadas da Capela",
+          "short_description": "Restaurante elegante com vista para o rio.",
+          "description": "O Arcadas da Capela oferece cozinha portuguesa contemporânea num espaço sofisticado com terraço sobre o Mondego.",
+          "image": "imagens/arcadas_capela.jpg",
+          "schedule": "12h30 a 15h00; 19h30 a 22h30",
+          "average_price": "35 EUR",
+          "location": "Parque Dr. Manuel Braga"
+        },
+        {
+          "id": 25,
+          "name": "Restaurante Loggia",
+          "short_description": "Restaurante contemporâneo no Museu Machado de Castro.",
+          "description": "O Loggia situa-se no terraço do Museu Machado de Castro e oferece uma experiência gastronómica moderna com vista privilegiada sobre a cidade.",
+          "image": "imagens/loggia.jpg",
+          "schedule": "12h30 a 15h00; 19h30 a 22h00",
+          "average_price": "30 EUR",
+          "location": "Largo Dr. José Rodrigues"
         }
       ]
     }
