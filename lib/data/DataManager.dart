@@ -8,6 +8,22 @@ class DataManager {
   // O ficheiro deve estar em assets/data/poi.json
   static const String _filePath = 'assets/data/poi.json';
 
+  Future<Map<String, dynamic>> getCityInfo() async {
+    try {
+      final String jsonString = await rootBundle.loadString(_filePath);
+      final Map<String, dynamic> decodedData = json.decode(jsonString);
+
+      return {
+        'cityId': decodedData['cityId'],
+        'cityName': decodedData['cityName'],
+      };
+    } catch (e) {
+      print('Erro ao carregar dados da cidade: $e');
+      return {'cityId': -1, 'cityName': 'Erro'};
+    }
+  }
+
+
   Future<List<Categoria>> getCategories() async {
     try {
       // 1. Carregar o conteúdo do ficheiro como String

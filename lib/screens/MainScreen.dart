@@ -40,11 +40,11 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Categorias', // Requisito do menu [cite: 1883, 1905]
+            label: 'Categorias',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: 'Favoritos', // Requisito do menu [cite: 1900, 1905]
+            label: 'Favoritos',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -42,7 +42,7 @@ class _DetailScreenState extends State<DetailScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(newStatus ? 'Adicionado aos Favoritos ❤️' : 'Removido dos Favoritos'),
+          content: Text(newStatus ? 'Adicionado aos Favoritos!' : 'Removido dos Favoritos'),
           duration: const Duration(seconds: 1),
         ),
       );
@@ -52,11 +52,9 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar transparente ou com título
       appBar: AppBar(
         title: Text(widget.point.name),
       ),
-      // Botão Flutuante (FAB) para os favoritos - Requisito muito comum em Android
       floatingActionButton: FloatingActionButton(
         onPressed: _onFavoritePressed,
         backgroundColor: Colors.white,
@@ -66,81 +64,115 @@ class _DetailScreenState extends State<DetailScreen> {
           size: 30,
         ),
       ),
-      body: SingleChildScrollView( // Permite fazer scroll se o texto for grande
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. IMAGEM GRANDE
-            Image.asset(
-              'assets/${widget.point.image}',
-              width: double.infinity, // Ocupa a largura toda
-              height: 250,
-              fit: BoxFit.cover,
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+
+          // --- 1. DEFINIR A PEÇA DA IMAGEM ---
+          final Widget imagem = Image.asset(
+            'assets/${widget.point.image}',
+            width: double.infinity,
+            height: 250,
+            fit: BoxFit.cover,
+          );
+
+          // --- 2. DEFINIR A PEÇA DO CONTEÚDO ---
+          final Widget conteudo = Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Título e Preço
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.point.name,
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.green[100],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        widget.point.averagePrice,
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // Informações (Horário e Localização)
+                _buildInfoRow(Icons.access_time, 'Horário:', widget.point.schedule),
+                const SizedBox(height: 8),
+                _buildInfoRow(Icons.location_on, 'Local:', widget.point.location),
+
+                const SizedBox(height: 20),
+                const Divider(),
+                const SizedBox(height: 10),
+
+                // Descrição Completa
+                const Text(
+                  "Sobre",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  widget.point.description,
+                  style: const TextStyle(fontSize: 16, height: 1.5, color: Colors.black87),
+                ),
+
+                // Espaço extra no fundo para o botão FAB não tapar o texto
+                const SizedBox(height: 80),
+              ],
             ),
+          );
 
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+          // --- 3. MONTAR O LAYOUT ---
+          if (orientation == Orientation.portrait) {
+            // MODO RETRATO: Coluna Simples
+            return SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 2. TÍTULO E PREÇO
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.point.name,
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.green[100],
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          widget.point.averagePrice,
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // 3. INFORMAÇÕES (Horário e Localização)
-                  _buildInfoRow(Icons.access_time, 'Horário:', widget.point.schedule),
-                  const SizedBox(height: 8),
-                  _buildInfoRow(Icons.location_on, 'Local:', widget.point.location),
-
-                  const SizedBox(height: 20),
-                  const Divider(),
-                  const SizedBox(height: 10),
-
-                  // 4. DESCRIÇÃO COMPLETA
-                  const Text(
-                    "Sobre",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.point.description,
-                    style: const TextStyle(fontSize: 16, height: 1.5, color: Colors.black87),
-                  ),
-
-                  // Espaço extra no fundo para o botão não tapar o texto
-                  const SizedBox(height: 80),
+                  imagem,
+                  conteudo,
                 ],
               ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            // MODO PAISAGEM: Split View (Lado a Lado)
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Expanded obriga a imagem a ocupar 50% da largura (flex: 1)
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: double.infinity, // Ocupa a altura toda disponível
+                    child: imagem,
+                  ),
+                ),
+                // Expanded obriga o texto a ocupar os outros 50%
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView( // Scroll independente para o texto
+                    child: conteudo,
+                  ),
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }
 
-  // Pequeno widget auxiliar para evitar repetição de código
+  // Widget auxiliar para as linhas de informação
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [

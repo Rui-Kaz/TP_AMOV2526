@@ -1,5 +1,6 @@
 {
-  "city": "Coimbra",
+  "cityName": "Coimbra",
+  "cityId": 1060300,
   "categories": [
     {
       "name": "Monumentos",
