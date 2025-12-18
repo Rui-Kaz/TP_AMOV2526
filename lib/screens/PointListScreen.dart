@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/PontoInteresse.dart';
 import '../models/categoria.dart';
-import 'DetailScreen.dart'; // Vamos criar este a seguir (ignora o erro por agora)
+import 'DetailScreen.dart';
 
 class PointsListScreen extends StatelessWidget {
   // Recebemos a categoria selecionada como parâmetro

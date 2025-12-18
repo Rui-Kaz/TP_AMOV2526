@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../data/DataManager.dart';
+import '../models/Cidade.dart';
 import 'CategoriaScreen.dart';
 
 
@@ -13,10 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Variáveis para a cidade
-  String _cityName = 'A carregar...';
-  int? _cityId;
 
+  Cidade? _cidade;
   String _temperature = '';
   int _weatherCode = 0;
   bool _isLoading = true; // Esta variável agora controla o carregamento da cidade + tempo
@@ -29,31 +28,32 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadInitialData() async {
-    // Instancia o DataManager
-    DataManager dataManager = DataManager();
+    try {
+      // Carrega os dados da cidade usando o DataManager
+      _cidade = await DataManager().getCityInfo();
 
-    // 1. Vai buscar a informação da cidade ao ficheiro JSON
-    final cityInfo = await dataManager.getCityInfo();
+      // Guarda a informação no estado do widget
+      setState(() {});
 
-    // 2. Guarda a informação no estado do widget
-    setState(() {
-      _cityName = cityInfo['cityName'] ?? 'Cidade não encontrada';
-      _cityId = cityInfo['cityId'];
-    });
-
-    // 3. Verifica se temos um ID válido antes de chamar a API de meteorologia
-    if (_cityId != null && _cityId != -1) {
-      await _getWeather(_cityId!); // Passa o ID para a função de meteorologia
-    } else {
-      // Se não houver ID, paramos o carregamento para não dar erro na API
+      // Verifica se temos um ID válido antes de chamar a API de meteorologia
+      if (_cidade != null && _cidade!.id != -1) {
+        await _getWeather(_cidade!.id);
+      } else {
+        setState(() {
+          _isLoading = false;
+          _temperature = 'N/A';
+          _weatherCode = -1;
+        });
+        print("--- ERRO: ID da cidade não encontrado no ficheiro JSON. ---");
+      }
+    } catch (e) {
+      print("--- ERRO AO CARREGAR DADOS DA CIDADE: $e ---");
       setState(() {
         _isLoading = false;
-        _temperature = 'N/A';
-        _weatherCode = -1; // Usar um código de erro
       });
-      print("--- ERRO: ID da cidade não encontrado no ficheiro JSON. ---");
     }
   }
+
 
   Future<void> _getWeather(int idCidade) async {
     print("--- A INICIAR PEDIDO METEOROLOGIA ---");
@@ -114,15 +114,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Mostra loading enquanto não tem dados da cidade
+    if (_cidade == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
         body: OrientationBuilder(
             builder: (context, orientation) {
               // --- COMPONENTE DA IMAGEM ---
               final Widget imagem = Image.asset(
-                'assets/imagens/$_cityName.jpg',
+                'assets/imagens/${_cidade!.name}.jpg',
                 height: orientation == Orientation.portrait ? 200 : double.infinity,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: orientation == Orientation.portrait ? 200 : double.infinity,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image_not_supported, size: 64),
+                  );
+                },
               );
 
               // --- COMPONENTE DO CONTEÚDO ---
@@ -130,13 +145,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Guia de $_cityName',
+                    'Guia de ${_cidade?.name ?? "A carregar..."}',
                     style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    _cityName,
+                    _cidade!.name,
                     style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),

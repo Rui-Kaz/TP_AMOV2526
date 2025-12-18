@@ -1,27 +1,27 @@
 import 'dart:convert'; // Para usar o jsonDecode
 import 'package:flutter/services.dart'; // Para usar o rootBundle
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/Cidade.dart';
 import '../models/PontoInteresse.dart';
 import '../models/categoria.dart';
 
 class DataManager {
-  // O ficheiro deve estar em assets/data/poi.json
+  // Localização do ficheiro json
   static const String _filePath = 'assets/data/poi.json';
 
-  Future<Map<String, dynamic>> getCityInfo() async {
-    try {
+  Future<Cidade> getCityInfo() async {
+    try { //carrega o ficheiro json
       final String jsonString = await rootBundle.loadString(_filePath);
+      //descodifica a string para um mapa (JSON Object)
       final Map<String, dynamic> decodedData = json.decode(jsonString);
-
-      return {
-        'cityId': decodedData['cityId'],
-        'cityName': decodedData['cityName'],
-      };
+      //retorna o objeto
+      return Cidade.fromJson(decodedData);
     } catch (e) {
       print('Erro ao carregar dados da cidade: $e');
-      return {'cityId': -1, 'cityName': 'Erro'};
+      return Cidade(id: -1, name: 'Erro');
     }
   }
+
 
 
   Future<List<Categoria>> getCategories() async {
