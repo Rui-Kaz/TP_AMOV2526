@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _cidade = await DataManager().getCityInfo();
 
       // Guarda a informação no estado do widget
-      setState(() {});
+      //setState(() {});
 
       // Verifica se temos um ID válido antes de chamar a API de meteorologia
       if (_cidade != null && _cidade!.id != -1) {
@@ -48,10 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       print("Erro crítico ao carregar dados: $e");
-      setState(() {
-        _isLoading = false;
         _cidade = Cidade(id: -1, name: 'Erro ao Carregar');
-      });
+    } finally {
+      setState(() => _isLoading = false); // Atualiza tudo de uma vez
     }
   }
 
@@ -76,8 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Background image
               Image.asset(
-                isLandscape ? 'assets/imagens/${_cidade!.name}_landscape.jpg'
-                : 'assets/imagens/${_cidade!.name}.jpg',
+                isLandscape ? 'assets/imagens/${_cidade?.name ?? "Coimbra"}_landscape.jpg'
+                : 'assets/imagens/${_cidade?.name ?? "Coimbra"}.jpg',
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
@@ -146,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              WeatherService.getWeatherIcon(_weatherData!.weatherCode),
+                              WeatherService.getWeatherIcon(_weatherData?.weatherCode ?? 1060300),
                               size: 48,
                               color: WeatherService.getWeatherColor(_weatherData!.weatherCode),
                               semanticLabel: 'Ícone de meteorologia',
