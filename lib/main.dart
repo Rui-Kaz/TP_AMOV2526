@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // Importamos o nosso ecrã principal que tem a barra de navegação
-import 'screens/MainScreen.dart';
+import 'screens/main_screen.dart';
 
 
 void main() {

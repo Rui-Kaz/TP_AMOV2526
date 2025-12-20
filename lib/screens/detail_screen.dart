@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/PontoInteresse.dart';
-import '../data/DataManager.dart';
+import '../models/point_interess.dart';
+import '../services/favorite_service.dart';
 
 class DetailScreen extends StatefulWidget {
   final PontoInteresse point;
@@ -12,6 +12,7 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  final FavoriteService _favoriteService = FavoriteService();
   bool _isFav = false; // Controla o estado visual do coração
 
   @override
@@ -22,7 +23,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   // Verifica se este local já estava nos favoritos ao abrir o ecrã
   void _checkFavoriteStatus() async {
-    bool favStatus = await DataManager().isFavorite(widget.point.id);
+    bool favStatus = await _favoriteService.isFavorite(widget.point.id);
     setState(() {
       _isFav = favStatus;
     });
@@ -31,7 +32,7 @@ class _DetailScreenState extends State<DetailScreen> {
   // Função chamada quando se clica no coração
   void _onFavoritePressed() async {
     // Chama o DataManager para atualizar a memória
-    bool newStatus = await DataManager().toggleFavorite(widget.point.id);
+    bool newStatus = await _favoriteService.toggleFavorite(widget.point.id);
 
     // Atualiza o ícone no ecrã
     setState(() {

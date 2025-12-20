@@ -1,11 +1,13 @@
-import 'PontoInteresse.dart';
+import 'point_interess.dart';
 
 class Categoria {
   final String name;
+  final String icon;
   final List<PontoInteresse> points;
 
   Categoria({
     required this.name,
+    this.icon = 'travel_explore',
     required this.points,
   });
 
@@ -18,6 +20,7 @@ class Categoria {
 
     return Categoria(
       name: json['name'],
+      icon: json['icon'],
       points: pointsList, // Guarda a lista convertida
     );
   }

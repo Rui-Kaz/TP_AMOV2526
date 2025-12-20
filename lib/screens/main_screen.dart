@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'CategoriaScreen.dart';
-import 'FavoritesScreen.dart';
-import 'HomeScreen.dart';
+import 'categoria_screen.dart';
+import 'favorites_screen.dart';
+import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,8 +14,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0; // Controla qual o separador ativo
 
-  // Lista provisória. Futuramente substituiremos pelos teus ecrãs reais:
-  // HomeScreen(), CategoriesScreen(), FavoritesScreen()
   final List<Widget> _screens = [
     const HomeScreen(),
     const CategoriaScreen(),

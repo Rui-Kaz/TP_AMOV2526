@@ -1,13 +1,14 @@
-import 'dart:convert'; // Para usar o jsonDecode
-import 'package:flutter/services.dart'; // Para usar o rootBundle
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/Cidade.dart';
-import '../models/PontoInteresse.dart';
-import '../models/categoria.dart';
+import '../models/city.dart';
+import '../models/point_interess.dart';
+import '../models/category.dart';
 
 class DataManager {
   // Localização do ficheiro json
   static const String _filePath = 'assets/data/poi.json';
+  static const String _favKey = 'favoritos_ids'; // Chave para guardar no disco
 
   Future<Cidade> getCityInfo() async {
     try { //carrega o ficheiro json
@@ -44,8 +45,8 @@ class DataManager {
     }
   }
 
-  // Chave para guardar no disco
-  static const String _favKey = 'favoritos_ids';
+
+
 
   // 1. Obter a lista de IDs favoritos
   Future<List<String>> getFavoriteIds() async {

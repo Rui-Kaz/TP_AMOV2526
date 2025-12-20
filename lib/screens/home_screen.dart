@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../data/DataManager.dart';
-import '../models/Cidade.dart';
-import 'CategoriaScreen.dart';
+import '../data/data_manager.dart';
+import '../models/city.dart';
+import '../services/weather_service.dart';
+import 'categoria_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -16,8 +15,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   Cidade? _cidade;
-  String _temperature = '';
-  int _weatherCode = 0;
+  WeatherData? _weatherData;
+  final WeatherService _weatherService = WeatherService();
   bool _isLoading = true; // Esta variável agora controla o carregamento da cidade + tempo
 
 
@@ -37,80 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Verifica se temos um ID válido antes de chamar a API de meteorologia
       if (_cidade != null && _cidade!.id != -1) {
-        await _getWeather(_cidade!.id);
-      } else {
-        setState(() {
-          _isLoading = false;
-          _temperature = 'N/A';
-          _weatherCode = -1;
-        });
-        print("--- ERRO: ID da cidade não encontrado no ficheiro JSON. ---");
+        try {
+          _weatherData = await _weatherService.getWeather(_cidade!.id);
+        } catch (weatherError) {
+          print("Erro ao obter meteorologia: $weatherError");
+          // Mantém _weatherData como null, o que ativa o fallback na UI
+        }
+        setState(() => _isLoading = false);
       }
     } catch (e) {
-      print("--- ERRO AO CARREGAR DADOS DA CIDADE: $e ---");
+      print("Erro crítico ao carregar dados: $e");
       setState(() {
         _isLoading = false;
+        _cidade = Cidade(id: -1, name: 'Erro ao Carregar');
       });
     }
   }
 
-
-  Future<void> _getWeather(int idCidade) async {
-    print("--- A INICIAR PEDIDO METEOROLOGIA ---");
-    // URL da API para Coimbra
-    //const String url = 'https://api.open-meteo.com/v1/forecast?latitude=40.2033&longitude=-8.4103&current_weather=true';
-
-    //IPMA
-    final String url = 'https://api.ipma.pt/open-data/forecast/meteorology/cities/daily/$idCidade.json';
-    try {
-      final http.Response response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-
-        // O IPMA devolve uma lista chamada "data".
-        // O índice [0] é a previsão de hoje.
-        final previsaoHoje = data['data'][0];
-
-        setState(() {
-          // A temperatura máxima vem como String no campo 'tMax'
-          _temperature = previsaoHoje['tMax'].toString();
-
-          // O código do tempo (chuva, sol) vem em 'idWeatherType'
-          _weatherCode = previsaoHoje['idWeatherType'];
-
-          _isLoading = false;
-        });
-
-        print("--- DADOS METEOROLÓGICOS ATUALIZADOS COM SUCESSO ---");
-      } else {
-        print("--- ERRO NO SERVIDOR DE METEOROLOGIA: ${response.statusCode} ---");
-        setState(() => _isLoading = false);
-      }
-    } catch (e) {
-      print('--- ERRO CRÍTICO (CATCH) AO OBTER METEOROLOGIA: $e ---');
-      setState(() => _isLoading = false);
-    }
-  }
-
-
-  IconData _getWeatherIcon(int code) {
-    if (code == 1) return Icons.wb_sunny; // Céu limpo
-    if (code >= 2 && code <= 5) return Icons.cloud_outlined; // Nublado
-    if (code >= 6 && code <= 15) return Icons.water_drop; // Chuva
-    if (code >= 19 && code <= 23) return Icons.ac_unit; // Neve
-    if (code >= 24 && code <= 27) return Icons.flash_on; // Trovoada
-    return Icons.help_outline; // Desconhecido ou N/A
-  }
-
-  String _getWeatherDescription(int code) {
-    if (code == 1) return 'Céu limpo';
-    if (code >= 2 && code <= 5) return 'Nublado';
-    if (code >= 6 && code <= 15) return 'Chuva';
-    if (code >= 19 && code <= 23) return 'Neve';
-    if (code >= 24 && code <= 27) return 'Trovoada';
-    return 'Indisponível';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,22 +100,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 20),
                   _isLoading
                       ? const CircularProgressIndicator()
-                      : Column(
+                      : _weatherData != null
+                      ? Column(
                     children: [
                       Icon(
-                        _getWeatherIcon(_weatherCode),
+                        WeatherService.getWeatherIcon(_weatherData!.weatherCode),
                         size: 50,
                         color: Colors.orange,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '$_temperature°C - ${_getWeatherDescription(_weatherCode)}',
+                        '${_weatherData!.temperature}°C - ${WeatherService.getWeatherDescription(_weatherData!.weatherCode)}',
                         style: const TextStyle(fontSize: 20),
                         textAlign: TextAlign.center,
                       ),
                     ],
+                  ) //caso não consiga obter dados do clima
+                  : const Column(
+                    children: [
+                      Icon(Icons.cloud_off, size: 50, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text(
+                        'Clima indisponível',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 30),
+
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -186,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
 
-              // --- LAYOUT CONSOANTE A ORIENTAÇÃO ---
+              // orientação
               if (orientation == Orientation.portrait) {
                 return Center(
                   child: SingleChildScrollView(
@@ -204,10 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
               } else {
                 return Row(
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: imagem,
-                    ),
+                    Expanded(flex: 1, child: imagem),
+                    // Expanded obriga o texto a ocupar os outros 50%
                     Expanded(
                       flex: 1,
                       child: SingleChildScrollView(

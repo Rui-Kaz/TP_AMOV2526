@@ -4,6 +4,7 @@
   "categories": [
     {
       "name": "Monumentos",
+      "icon": "castle",
       "points": [
         {
           "id": 1,
@@ -99,6 +100,7 @@
     },
     {
       "name": "Museus",
+      "icon": "museum",
       "points": [
         {
           "id": 3,
@@ -184,6 +186,7 @@
     },
     {
       "name": "Gastronomia",
+      "icon": "restaurant",
       "points": [
         {
           "id": 4,
