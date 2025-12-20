@@ -14,11 +14,20 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0; // Controla qual o separador ativo
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const CategoriaScreen(),
-    const FavoritesScreen(),
-  ];
+  // 1. Removemos o 'final' e a lista imediata para a podermos inicializar no initState
+  late List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    // 2. Inicializamos a lista aqui. 
+    // Passamos uma função (callback) para a HomeScreen que chama o nosso _onItemTapped
+    _screens = [
+      HomeScreen(onVerCategorias: () => _onItemTapped(1)), 
+      const CategoriaScreen(),
+      const FavoritesScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {

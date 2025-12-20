@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../data/data_manager.dart';
 import '../models/city.dart';
 import '../services/weather_service.dart';
-import 'categoria_screen.dart';
+//import 'categoria_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+final VoidCallback onVerCategorias;
+
+  const HomeScreen({super.key, required this.onVerCategorias});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -129,12 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 30),
 
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const CategoriaScreen()),
-                      );
-                    },
+                    onPressed: widget.onVerCategorias,
                     child: const Text('Ver Categorias'),
                   ),
                 ],
