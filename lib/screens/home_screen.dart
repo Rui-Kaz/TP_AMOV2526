@@ -124,16 +124,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(isLandscape ? 20 : 32),
-                    child: Column(
+                    child: _isLoading // Mostra loading enquanto carrega
+                    ? const Center(child: CircularProgressIndicator())
+                    : _weatherData == null //se não tiver dados de meteorologia
+                        // em caso de erro
+                        ? const Center(child: Text('Erro ao carregar meteorologia'))
+                        : Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _cidade!.name,
-                          style: TextStyle(
-                            fontSize: isLandscape ? 22 : 28,
-                            fontWeight: FontWeight.bold,
+                        children: [
+                          Text(
+                            _cidade!.name,
+                            style: TextStyle(
+                              fontSize: isLandscape ? 22 : 28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 16),
 
                         // Ícone e temperatura
