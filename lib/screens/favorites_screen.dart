@@ -80,11 +80,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
                     // Em landscape, usa GridView com cards
                     if (isLandscape) {
+                      double childAspectRatio = isLandscape ? 1.5 : 1.2; // Ajusta o aspect ratio
                       return GridView.builder(
                         padding: const EdgeInsets.all(16.0),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: isWideScreen ? 3 : 2,
-                          childAspectRatio: 1.2,
+                          childAspectRatio: childAspectRatio,
                           crossAxisSpacing: 16.0,
                           mainAxisSpacing: 16.0,
                         ),
@@ -112,13 +113,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.asset(
                                       'assets/${point.image}',
-                                      width: 80,
-                                      height: 80,
+                                      width: isLandscape ? 60 : 80,
+                                      height: isLandscape ? 60 : 80,
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) {
                                         return Container(
-                                          width: 80,
-                                          height: 80,
+                                          width: isLandscape ? 60 : 80,
+                                          height: isLandscape ? 60 : 80,
                                           color: Colors.grey[300],
                                           child: const Icon(Icons.image_not_supported),
                                         );
@@ -133,8 +134,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 16,
+                                      style: TextStyle(
+                                        fontSize: isLandscape ? 14 : 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -142,7 +143,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                   const SizedBox(height: 4),
                                   Text(
                                     point.averagePrice,
-                                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                                    style: TextStyle(
+                                        fontSize: isLandscape ? 12 : 14,
+                                        color: Colors.grey
+                                    ),
                                   ),
                                 ],
                               ),
@@ -163,7 +167,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             maxWidth: isWideScreen ? 800 : double.infinity,
                           ),
                           child: Card( // Card para dar sombra ao item
-                            elevation: 1,
+                            elevation: 4,
                             child: ListTile(
                               contentPadding: EdgeInsets.all(isWideScreen ? 16.0 : 12.0),
                               leading: ClipRRect( // ClipRRect para limitar o tamanho da imagem

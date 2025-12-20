@@ -113,7 +113,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Card de meteorologia no fundo
               Positioned(
-                bottom: isLandscape ? 20 : 80,
+                //em landscape
+                bottom: isLandscape ? 20 : null,
+                //em portrait
+                top: isLandscape ? null : MediaQuery.of(context).size.height * 0.33,
                 left: 20,
                 right: 20,
                 child: Card(
