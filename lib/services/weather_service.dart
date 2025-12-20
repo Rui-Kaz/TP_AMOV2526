@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,6 +46,17 @@ class WeatherService {
     if (code >= 24 && code <= 27) return 'Trovoada';
     return 'Indisponível';
   }
+
+// Para as cores dos icones
+  static Color getWeatherColor(int code) {
+    if (code == 1) return Colors.amber; // Céu limpo - Amarelo
+    if (code >= 2 && code <= 5) return Colors.grey; // Nublado - Cinza
+    if (code >= 6 && code <= 15) return Colors.blue; // Chuva - Azul
+    if (code >= 19 && code <= 23) return Colors.lightBlueAccent; // Neve - Azul claro
+    if (code >= 24 && code <= 27) return Colors.deepPurple; // Trovoada - Roxo
+    return Colors.grey; // Padrão
+  }
+
 }
 
 // Classe modelo para encapsular os dados do clima

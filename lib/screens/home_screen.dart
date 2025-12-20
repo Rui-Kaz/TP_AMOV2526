@@ -11,7 +11,7 @@ final VoidCallback onVerCategorias;
   const HomeScreen({super.key, required this.onVerCategorias});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState(); // Criação do estado do widget
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -67,64 +67,44 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     return Scaffold(
-        body: OrientationBuilder(
-            builder: (context, orientation) {
-              // --- COMPONENTE DA IMAGEM ---
-              final Widget imagem = Image.asset(
-                'assets/imagens/${_cidade!.name}.jpg',
-                height: orientation == Orientation.portrait ? 200 : double.infinity,
-                width: double.infinity,
+      body: OrientationBuilder( // Detecta a orientação do dispositivo
+        builder: (context, orientation) {
+          final isLandscape = orientation == Orientation.landscape;
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              // Background image
+              Image.asset(
+                isLandscape ? 'assets/imagens/${_cidade!.name}_landscape.jpg'
+                : 'assets/imagens/${_cidade!.name}.jpg',
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    height: orientation == Orientation.portrait ? 200 : double.infinity,
                     color: Colors.grey[300],
-                    child: const Icon(Icons.image_not_supported, size: 64),
+                    child: const Icon(
+                        Icons.image_not_supported,
+                        size: 64
+                    ),
                   );
                 },
-              );
-
-              // --- COMPONENTE DO CONTEÚDO ---
-              final Widget conteudo = Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Guia de ${_cidade?.name ?? "A carregar..."}',
-                    style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    _cidade!.name,
-                    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  _isLoading
-                      ? const CircularProgressIndicator()
-                      : _weatherData != null
-                      ? Column(
-                    children: [
-                      Icon(
-                        WeatherService.getWeatherIcon(_weatherData!.weatherCode),
-                        size: 50,
-                        color: Colors.orange,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${_weatherData!.temperature}°C - ${WeatherService.getWeatherDescription(_weatherData!.weatherCode)}',
-                        style: const TextStyle(fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ) //caso não consiga obter dados do clima
-                  : const Column(
-                    children: [
-                      Icon(Icons.cloud_off, size: 50, color: Colors.grey),
-                      SizedBox(height: 8),
-                      Text(
-                        'Clima indisponível',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              // Título no topo
+              Positioned( //Se em landscape ou portrait
+                top: isLandscape ? 20 : 60,
+                left: isLandscape ? 30 : 0,
+                right: isLandscape ? null : 0,
+                child: Text(
+                  'Guia de ${_cidade?.name ?? "A carregar..."}',
+                  style: TextStyle(
+                    fontSize: isLandscape ? 28 : 42,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2, 2),
+                        blurRadius: 4,
+                        color: Colors.black54,
                       ),
                     ],
                   ),
@@ -134,43 +114,71 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: widget.onVerCategorias,
                     child: const Text('Ver Categorias'),
                   ),
-                ],
-              );
-
-              // orientação
-              if (orientation == Orientation.portrait) {
-                return Center(
-                  child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(isLandscape ? 20 : 32),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 20),
-                        imagem,
-                        const SizedBox(height: 30),
-                        conteudo,
-                        const SizedBox(height: 20),
+                        Text(
+                          _cidade!.name,
+                          style: TextStyle(
+                            fontSize: isLandscape ? 20 : 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: isLandscape ? 12 : 20),
+                        _isLoading
+                            ? const CircularProgressIndicator()
+                            : _weatherData != null
+                            ? Column(
+                          children: [
+                            Icon(
+                              WeatherService.getWeatherIcon(
+                                  _weatherData!.weatherCode),
+                              size: isLandscape ? 40 : 50,
+                              color: WeatherService.getWeatherColor(_weatherData!.weatherCode),
+                              semanticLabel: 'Ícone de meteorologia',
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${_weatherData!.temperature}°C - ${WeatherService
+                                  .getWeatherDescription(
+                                  _weatherData!.weatherCode)}',
+                              style: TextStyle(
+                                fontSize: isLandscape ? 16 : 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ) // Em caso de
+                        : const Column(
+                          children: [
+                            Icon(
+                                Icons.cloud_off,
+                                size: 50,
+                                color: Colors.grey,
+                                semanticLabel: 'Ícone de meteorologia',
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Clima indisponível',
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.grey
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                );
-              } else {
-                return Row(
-                  children: [
-                    Expanded(flex: 1, child: imagem),
-                    // Expanded obriga o texto a ocupar os outros 50%
-                    Expanded(
-                      flex: 1,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: conteudo,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-            },
-        ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
