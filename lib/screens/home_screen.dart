@@ -117,56 +117,65 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: isLandscape ? 20 : null,
                 //em portrait
                 top: isLandscape ? null : MediaQuery.of(context).size.height * 0.33,
-                left: 20,
-                right: 20,
-                child: Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                child: Align(
+                  alignment: isLandscape ? Alignment.bottomCenter : Alignment.topCenter,
                   child: Padding(
-                    padding: EdgeInsets.all(isLandscape ? 20 : 32),
-                    child: _isLoading // Mostra loading enquanto carrega
-                    ? const Center(child: CircularProgressIndicator())
-                    : _weatherData == null //se não tiver dados de meteorologia
-                        // em caso de erro
-                        ? const Center(child: Text('Erro ao carregar meteorologia'))
-                        : Column(
-                      mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _cidade!.name,
-                            style: TextStyle(
-                              fontSize: isLandscape ? 22 : 28,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: isLandscape ? 400 : 350,
+                      ),
+                      child: Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(isLandscape ? 20 : 32),
+                          child: _isLoading // Mostra loading enquanto carrega
+                          ? const Center(child: CircularProgressIndicator())
+                          : _weatherData == null //se não tiver dados de meteorologia
+                              // em caso de erro
+                              ? const Center(child: Text('Erro ao carregar meteorologia'))
+                              : Column(
+                            mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _cidade!.name,
+                                  style: TextStyle(
+                                    fontSize: isLandscape ? 22 : 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              const SizedBox(height: 16),
+
+                              // Ícone e temperatura
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    WeatherService.getWeatherIcon(_weatherData?.weatherCode ?? 1060300),
+                                    size: 48,
+                                    color: WeatherService.getWeatherColor(_weatherData!.weatherCode),
+                                    semanticLabel: 'Ícone de meteorologia',
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Text(
+                                    '${_weatherData!.temperature}°C',
+                                    style: TextStyle(fontSize: isLandscape ? 32 : 40),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+
+                              Text(
+                                WeatherService.getWeatherDescription(_weatherData!.weatherCode),
+                                style: const TextStyle(fontSize: 18, color: Colors.grey),
+                              ),
+                            ],
                           ),
-                        const SizedBox(height: 16),
-
-                        // Ícone e temperatura
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              WeatherService.getWeatherIcon(_weatherData?.weatherCode ?? 1060300),
-                              size: 48,
-                              color: WeatherService.getWeatherColor(_weatherData!.weatherCode),
-                              semanticLabel: 'Ícone de meteorologia',
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              '${_weatherData!.temperature}°C',
-                              style: TextStyle(fontSize: isLandscape ? 32 : 40),
-                            ),
-                          ],
                         ),
-                        const SizedBox(height: 8),
-
-                        Text(
-                          WeatherService.getWeatherDescription(_weatherData!.weatherCode),
-                          style: const TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
