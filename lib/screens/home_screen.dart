@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               // Título no topo
-              Positioned( //Se em landscape ou portrait
+              Positioned(
                 top: isLandscape ? 20 : 60,
                 left: isLandscape ? 30 : 0,
                 right: isLandscape ? null : 0,
@@ -102,17 +102,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.white,
                     shadows: [
                       Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black87,
                         offset: Offset(2, 2),
-                        blurRadius: 4,
-                        color: Colors.black54,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  textAlign: isLandscape ? TextAlign.left : TextAlign.center,
+                ),
+              ),
 
-                  ElevatedButton(
-                    onPressed: widget.onVerCategorias,
-                    child: const Text('Ver Categorias'),
+              // Card de meteorologia no fundo
+              Positioned(
+                bottom: isLandscape ? 20 : 80,
+                left: 20,
+                right: 20,
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(isLandscape ? 20 : 32),
@@ -122,53 +130,34 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           _cidade!.name,
                           style: TextStyle(
-                            fontSize: isLandscape ? 20 : 24,
-                            fontWeight: FontWeight.w500,
+                            fontSize: isLandscape ? 22 : 28,
+                            fontWeight: FontWeight.bold,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: isLandscape ? 12 : 20),
-                        _isLoading
-                            ? const CircularProgressIndicator()
-                            : _weatherData != null
-                            ? Column(
+                        const SizedBox(height: 16),
+
+                        // Ícone e temperatura
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              WeatherService.getWeatherIcon(
-                                  _weatherData!.weatherCode),
-                              size: isLandscape ? 40 : 50,
+                              WeatherService.getWeatherIcon(_weatherData!.weatherCode),
+                              size: 48,
                               color: WeatherService.getWeatherColor(_weatherData!.weatherCode),
                               semanticLabel: 'Ícone de meteorologia',
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(width: 16),
                             Text(
-                              '${_weatherData!.temperature}°C - ${WeatherService
-                                  .getWeatherDescription(
-                                  _weatherData!.weatherCode)}',
-                              style: TextStyle(
-                                fontSize: isLandscape ? 16 : 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
+                              '${_weatherData!.temperature}°C',
+                              style: TextStyle(fontSize: isLandscape ? 32 : 40),
                             ),
                           ],
-                        ) // Em caso de
-                        : const Column(
-                          children: [
-                            Icon(
-                                Icons.cloud_off,
-                                size: 50,
-                                color: Colors.grey,
-                                semanticLabel: 'Ícone de meteorologia',
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Clima indisponível',
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.grey
-                              ),
-                            ),
-                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        Text(
+                          WeatherService.getWeatherDescription(_weatherData!.weatherCode),
+                          style: const TextStyle(fontSize: 18, color: Colors.grey),
                         ),
                       ],
                     ),
