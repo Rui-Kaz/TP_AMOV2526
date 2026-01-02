@@ -80,16 +80,16 @@ class DataManager {
 
   // 4. Obter a lista completa de objetos PontoInteresse que são favoritos
   Future<List<PontoInteresse>> getFavoritePoints() async {
-    // 1. Vamos buscar todos os IDs guardados
+    // obtém todos os IDs guardados
     final List<String> favIds = await getFavoriteIds();
 
     // Se não houver favoritos, poupamos trabalho e retornamos logo vazio
     if (favIds.isEmpty) return [];
 
-    // 2. Vamos buscar todas as categorias (e os seus pontos)
+    // obtém todas as categorias (e os seus pontos)
     final List<Categoria> allCategories = await getCategories();
 
-    // 3. Vamos percorrer tudo e encontrar os pontos que coincidem
+    // percorre tudo e encontrar os pontos que coincidem
     List<PontoInteresse> favoritePoints = [];
 
     for (var category in allCategories) {

@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      // Aqui definimos que o primeiro ecrã da app é o MainScreen
+      // define que o primeiro ecrã da app é o MainScreen
       home: const MainScreen(),
     );
   }

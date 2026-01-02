@@ -76,7 +76,7 @@ class _DetailScreenState extends State<DetailScreen> {
             fit: BoxFit.cover,
           );
 
-          // --- 2. DEFINIR A PEÇA DO CONTEÚDO ---
+          // define peça de conteudo
           final Widget conteudo = Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -134,9 +134,9 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           );
 
-          // --- 3. MONTAR O LAYOUT ---
+          // montar o layout
           if (orientation == Orientation.portrait) {
-            // MODO RETRATO: Coluna Simples
+            // modo portrait: Coluna Simples
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -146,7 +146,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             );
           } else {
-            // MODO PAISAGEM: Split View (Lado a Lado)
+            // modo landscape: Split View (Lado a Lado)
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

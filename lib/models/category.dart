@@ -12,10 +12,10 @@ class Categoria {
   });
 
   factory Categoria.fromJson(Map<String, dynamic> json) {
-    // 1. Obtem a lista raw do JSON
+    // Obtem a lista raw do JSON
     var list = json['points'] as List;
 
-    // 2. Converte cada item dessa lista num objeto PontoInteresse
+    // Converte cada item dessa lista num objeto PontoInteresse
     List<PontoInteresse> pointsList = list.map((i) => PontoInteresse.fromJson(i)).toList();
 
     return Categoria(

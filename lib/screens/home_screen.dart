@@ -115,10 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Positioned(
                 bottom: isLandscape ? 20 : null,
                 top: isLandscape ? null : MediaQuery.of(context).size.height * 0.33,
-                // --- ALTERAÇÃO APLICADA ---
                 left: isLandscape ? MediaQuery.of(context).size.width * 0.35 : 30,
                 right: isLandscape ? MediaQuery.of(context).size.width * 0.35 : 30,
-                // --------------------------
                 child: Card(
                   elevation: 8,
                   shape: RoundedRectangleBorder(
