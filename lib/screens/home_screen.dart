@@ -4,9 +4,8 @@ import '../models/city.dart';
 import '../services/weather_service.dart';
 //import 'categoria_screen.dart';
 
-
 class HomeScreen extends StatefulWidget {
-final VoidCallback onVerCategorias;
+  final VoidCallback onVerCategorias;
 
   const HomeScreen({super.key, required this.onVerCategorias});
 
@@ -15,12 +14,11 @@ final VoidCallback onVerCategorias;
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   Cidade? _cidade;
   WeatherData? _weatherData;
   final WeatherService _weatherService = WeatherService();
-  bool _isLoading = true; // Esta variável agora controla o carregamento da cidade + tempo
-
+  bool _isLoading =
+      true; // Esta variável agora controla o carregamento da cidade + tempo
 
   @override
   void initState() {
@@ -48,131 +46,157 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       print("Erro crítico ao carregar dados: $e");
-        _cidade = Cidade(id: -1, name: 'Erro ao Carregar');
+      _cidade = Cidade(id: -1, name: 'Erro ao Carregar');
     } finally {
       setState(() => _isLoading = false); // Atualiza tudo de uma vez
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     // Mostra loading enquanto não tem dados da cidade
     if (_cidade == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
-      body: OrientationBuilder( // Detecta a orientação do dispositivo
-        builder: (context, orientation) {
-          final isLandscape = orientation == Orientation.landscape;
-
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              // Background image
-              Image.asset(
-                isLandscape ? 'assets/imagens/${_cidade?.name ?? "Coimbra"}_landscape.jpg'
-                : 'assets/imagens/${_cidade?.name ?? "Coimbra"}.jpg',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Icon(
-                        Icons.image_not_supported,
-                        size: 64
-                    ),
-                  );
-                },
-              ),
-              // Título no topo
-              Positioned(
-                top: isLandscape ? 20 : 60,
-                left: isLandscape ? 30 : 0,
-                right: isLandscape ? null : 0,
-                child: Text(
-                  'Guia de ${_cidade?.name ?? "A carregar..."}',
-                  style: TextStyle(
-                    fontSize: isLandscape ? 28 : 42,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 10.0,
-                        color: Colors.black87,
-                        offset: Offset(2, 2),
-                      ),
-                    ],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 1000),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0.05, 0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
                   ),
-                  textAlign: isLandscape ? TextAlign.left : TextAlign.center,
-                ),
-              ),
-
-              // Card de meteorologia no fundo
-              Positioned(
-                bottom: isLandscape ? 20 : null,
-                top: isLandscape ? null : MediaQuery.of(context).size.height * 0.33,
-                left: isLandscape ? MediaQuery.of(context).size.width * 0.35 : 30,
-                right: isLandscape ? MediaQuery.of(context).size.width * 0.35 : 30,
-                child: Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(isLandscape ? 15 : 32),
-                    child: _isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : _weatherData == null
-                            ? const Center(child: Text('Erro ao carregar meteorologia'))
-                            : Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    _cidade!.name,
-                                    style: TextStyle(
-                                      fontSize: isLandscape ? 20 : 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: isLandscape ? 8 : 16),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        WeatherService.getWeatherIcon(
-                                            _weatherData?.weatherCode ?? 0),
-                                        size: isLandscape ? 35 : 48,
-                                        color: WeatherService.getWeatherColor(
-                                            _weatherData!.weatherCode),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Text(
-                                        '${_weatherData!.temperature}°C',
-                                        style: TextStyle(
-                                            fontSize: isLandscape ? 28 : 40),
-                                      ),
-                                    ],
-                                  ),
-                                  if (!isLandscape) const SizedBox(height: 8),
-                                  Text(
-                                    WeatherService.getWeatherDescription(
-                                        _weatherData!.weatherCode),
-                                    style: TextStyle(
-                                        fontSize: isLandscape ? 14 : 18,
-                                        color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                  ),
-                ),
-              ),
-            ],
+              child: child,
+            ),
           );
         },
+        child: OrientationBuilder(
+          // Detecta a orientação do dispositivo
+          key: ValueKey(MediaQuery.of(context).orientation),
+          builder: (context, orientation) {
+            final isLandscape = orientation == Orientation.landscape;
+
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                // Background image
+                Image.asset(
+                  isLandscape
+                      ? 'assets/imagens/${_cidade?.name ?? "Coimbra"}_landscape.jpg'
+                      : 'assets/imagens/${_cidade?.name ?? "Coimbra"}.jpg',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported, size: 64),
+                    );
+                  },
+                ),
+                // Título no topo
+                Positioned(
+                  top: isLandscape ? 20 : 60,
+                  left: isLandscape ? 30 : 0,
+                  right: isLandscape ? null : 0,
+                  child: Text(
+                    'Guia de ${_cidade?.name ?? "A carregar..."}',
+                    style: TextStyle(
+                      fontSize: isLandscape ? 28 : 42,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.black87,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    textAlign: isLandscape ? TextAlign.left : TextAlign.center,
+                  ),
+                ),
+
+                // Card de meteorologia no fundo
+                Positioned(
+                  bottom: isLandscape ? 20 : null,
+                  top: isLandscape
+                      ? null
+                      : MediaQuery.of(context).size.height * 0.33,
+                  left: isLandscape
+                      ? MediaQuery.of(context).size.width * 0.35
+                      : 30,
+                  right: isLandscape
+                      ? MediaQuery.of(context).size.width * 0.35
+                      : 30,
+                  child: Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(isLandscape ? 15 : 32),
+                      child: _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : _weatherData == null
+                          ? const Center(
+                              child: Text('Erro ao carregar meteorologia'),
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _cidade!.name,
+                                  style: TextStyle(
+                                    fontSize: isLandscape ? 20 : 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: isLandscape ? 8 : 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      WeatherService.getWeatherIcon(
+                                        _weatherData?.weatherCode ?? 0,
+                                      ),
+                                      size: isLandscape ? 35 : 48,
+                                      color: WeatherService.getWeatherColor(
+                                        _weatherData!.weatherCode,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Text(
+                                      '${_weatherData!.temperature}°C',
+                                      style: TextStyle(
+                                        fontSize: isLandscape ? 28 : 40,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (!isLandscape) const SizedBox(height: 8),
+                                Text(
+                                  WeatherService.getWeatherDescription(
+                                    _weatherData!.weatherCode,
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: isLandscape ? 14 : 18,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     // Inicializa a lista aqui.
     // Passa uma função (callback) para a HomeScreen que chama o _onItemTapped
     _screens = [
-      HomeScreen(onVerCategorias: () => _onItemTapped(1)), 
+      HomeScreen(onVerCategorias: () => _onItemTapped(1)),
       const CategoriaScreen(),
       const FavoritesScreen(),
     ];
@@ -38,17 +38,17 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex], // Mostra o widget correspondente ao índice
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 800),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: _screens[_selectedIndex],
+      ), // Mostra o widget correspondente ao índice
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Categorias',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Categorias'),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Favoritos',
