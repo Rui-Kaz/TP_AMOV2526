@@ -43,8 +43,15 @@ class _MainScreenState extends State<MainScreen> {
         transitionBuilder: (child, animation) {
           return FadeTransition(opacity: animation, child: child);
         },
-        child: _screens[_selectedIndex],
-      ), // Mostra o widget correspondente ao índice
+        child: LayoutBuilder(
+          key: ValueKey(
+            '${_selectedIndex}_${MediaQuery.of(context).orientation}',
+          ),
+          builder: (context, constraints) {
+            return _screens[_selectedIndex];
+          },
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -55,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.blueAccent,
         onTap: _onItemTapped,
       ),
     );

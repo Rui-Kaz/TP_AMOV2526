@@ -144,8 +144,7 @@ class CategoriaScreen extends StatelessWidget {
                                         size: isLandscape ? 48 : 64,
                                         // Reduz o ícone em landscape
                                         color: Colors.blueAccent,
-                                        semanticLabel: "${category
-                                            .name}", // acessibilidade
+                                        semanticLabel: category.name, // acessibilidade
                                       ),
                                       const SizedBox(height: 12),
                                       Text(
